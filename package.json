@@ -1,0 +1,28 @@
+{
+    "name": "@kreatif/starter",
+    "version": "0.0.1",
+    "description": "Package including default Utils, Components and Helpers for Kreatif's Image Projects",
+    "main": "index.js",
+    "base": "src",
+    "scripts": {
+        "format": "prettier --write ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/kreatifIT/kreatif-starter.git"
+    },
+    "author": "Kreatif GmbH",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/kreatifIT/kreatif-starter/issues"
+    },
+    "homepage": "https://github.com/kreatifIT/kreatif-starter#readme",
+    "dependencies": {
+        "preact": "^10.17.1",
+        "redaxo-adapter": "^0.0.37"
+    },
+    "devDependencies": {
+        "prettier": "^3.0.3",
+        "prettier-plugin-astro": "^0.12.0"
+    }
+}
