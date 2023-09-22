@@ -1,4 +1,4 @@
-import { getClangId } from '@helpers/cookies';
+import { getClangId } from '../utils/clang';
 import { useEffect, useState } from 'preact/hooks';
 import { RedaxoAdapter } from 'redaxo-adapter';
 
@@ -27,10 +27,6 @@ export default function useRedaxoAdapter<T>(
     };
 
     useEffect(() => {
-        RedaxoAdapter.init(
-            import.meta.env.PUBLIC_REDAXO_ENDPOINT,
-            import.meta.env.PUBLIC_REDAXO_ROOT,
-        );
         fetchData();
     }, []);
 

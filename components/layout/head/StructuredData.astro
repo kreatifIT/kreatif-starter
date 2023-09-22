@@ -1,0 +1,89 @@
+---
+import type { Article, Metadata } from 'redaxo-adapter';
+import { Schema } from 'astro-seo-schema';
+import { getSettings } from '../../../utils/wildcards';
+import { buildLogoUrl, mergeUrl } from '../../../utils/url';
+
+interface Props {
+    metadata: Metadata;
+    siteStartArticle: Article;
+    baseUrl: string;
+}
+
+const settings = getSettings(Astro);
+const { baseUrl, metadata, siteStartArticle } = Astro.props;
+const organizationImage = settings.organization?.images[0];
+
+const siteStartUrl = mergeUrl(baseUrl, siteStartArticle.url);
+const logoUrl = buildLogoUrl(baseUrl);
+---
+
+<Schema
+    item={{
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: settings.organization?.name,
+        url: siteStartUrl,
+        logo: logoUrl,
+    }}
+/>
+<Schema
+    item={{
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        name: settings.organization?.name,
+        address: {
+            '@type': 'PostalAddress',
+            streetAddress: settings.organization?.streetAddress,
+            addressLocality: settings.organization?.city,
+            addressRegion: settings.organization?.region,
+            addressCountry: settings.organization?.isoCountryCode,
+            postalCode: settings.organization?.zip,
+        },
+    }}
+/>
+<Schema
+    item={{
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        name: settings.organization?.name,
+        address: {
+            '@type': 'PostalAddress',
+            streetAddress: settings.organization?.streetAddress,
+            addressLocality: settings.organization?.city,
+            addressRegion: settings.organization?.region,
+            addressCountry: settings.organization?.isoCountryCode,
+            postalCode: settings.organization?.zip,
+        },
+        geo: {
+            '@type': 'GeoCoordinates',
+            latitude: settings.contact?.coordinates[0],
+            longitude: settings.contact?.coordinates[1],
+        },
+        image: organizationImage?.src,
+        telephone: settings.contact?.phone,
+        url: siteStartUrl,
+        logo: logoUrl,
+    }}
+/>
+<Schema
+    item={{
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: metadata.breadcrumbs.map((breadcrumb, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: breadcrumb.label,
+            item: siteStartUrl,
+        })),
+    }}
+/>
+
+<Schema
+    item={{
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: settings.websiteName || settings.organization?.name,
+        url: siteStartUrl,
+    }}
+/>

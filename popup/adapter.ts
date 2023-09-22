@@ -4,6 +4,7 @@ import {
     RedaxoAdapter,
     ArticleSlice,
 } from 'redaxo-adapter';
+import type { AstroGlobal } from 'astro';
 
 export interface PopupUserInformation {
     closed: boolean;

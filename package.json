@@ -2,8 +2,7 @@
     "name": "@kreatif/starter",
     "version": "0.0.1",
     "description": "Package including default Utils, Components and Helpers for Kreatif's Image Projects",
-    "main": "index.js",
-    "base": "src",
+    "type": "module",
     "scripts": {
         "format": "prettier --write ."
     },
@@ -18,11 +17,22 @@
     },
     "homepage": "https://github.com/kreatifIT/kreatif-starter#readme",
     "dependencies": {
+        "@fancyapps/ui": "^5.0.22",
+        "astro": "^3.1.1",
+        "astro-seo": "^0.8.0",
+        "astro-seo-schema": "^3.2.0",
+        "framer-motion": "^10.16.4",
+        "gql-query-builder": "^3.8.0",
         "preact": "^10.17.1",
-        "redaxo-adapter": "^0.0.37"
+        "react-map-gl": "^7.1.6",
+        "redaxo-adapter": "^0.0.39",
+        "ukiyojs": "^4.1.2",
+        "video.js": "^8.5.2"
     },
     "devDependencies": {
+        "@types/node": "^20.6.3",
         "prettier": "^3.0.3",
-        "prettier-plugin-astro": "^0.12.0"
+        "prettier-plugin-astro": "^0.12.0",
+        "typescript": "^5.2.2"
     }
 }

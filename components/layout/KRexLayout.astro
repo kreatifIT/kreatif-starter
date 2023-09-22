@@ -1,0 +1,77 @@
+---
+import type {Article, Clang, Metadata} from 'redaxo-adapter';
+import HrefLangs from './head/HrefLangs.astro';
+import SEO from './head/SEO.astro';
+import Tracking from './head/Tracking.astro';
+import StructuredData from './head/StructuredData.astro';
+import Recaptcha from './head/Recaptcha.astro';
+import {ViewTransitions} from 'astro:transitions';
+
+interface Props {
+    metadata: Metadata;
+    clang: Clang;
+    clangs: Clang[];
+    siteStartArticle: Article;
+    footerArticle: Article;
+    path: string;
+    article?: Article;
+    baseUrl: string;
+    viewTransitions?: boolean;
+    recaptcha?: boolean;
+    bodyClass?: string;
+}
+const {
+    recaptcha = false,
+    baseUrl,
+    bodyClass = '',
+    viewTransitions = true,
+    clangs,
+    siteStartArticle,
+    metadata,
+    clang,
+    path,
+} = Astro.props;
+---
+
+<html lang={clang.code.toLowerCase()}>
+<head>
+    <meta name="generator" content={Astro.generator}/>
+    <slot name="href-langs">
+        <HrefLangs clangs={clangs} {baseUrl}/>
+    </slot>
+    <slot name="seo">
+        <SEO metadata={metadata} {path} {baseUrl}/>
+    </slot>
+    <slot name="tracking">
+        <Tracking/>
+    </slot>
+    <slot name="structured-data">
+        <StructuredData
+            {baseUrl}
+            metadata={metadata}
+            siteStartArticle={siteStartArticle}
+        />
+    </slot>
+    {viewTransitions &&
+            <slot name="view transitions">
+                <ViewTransitions/>
+                <script type="text/javascript" defer>
+                    document.addEventListener('astro:beforeload', () => {
+                        if (
+                            typeof _iub.cs !== 'undefined' &&
+                            typeof _iub.cs.api !== 'undefined'
+                        ) {
+                            _iub.cs.api.activateSnippets();
+                        }
+                    });
+                </script>
+            </slot>}
+    {recaptcha &&
+            <Recaptcha/>}
+    <slot name="head"/>
+</head>
+
+<body class={bodyClass}>
+<slot />
+</body>
+</html>

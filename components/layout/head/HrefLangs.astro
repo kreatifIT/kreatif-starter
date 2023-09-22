@@ -1,0 +1,26 @@
+---
+import type { Clang } from 'redaxo-adapter';
+import { mergeUrl } from '../../../utils/url';
+
+interface Props {
+    clangs: Clang[];
+    baseUrl: string;
+}
+const { clangs, baseUrl } = Astro.props;
+---
+
+<link
+    rel="alternate"
+    hreflang="x-default"
+    href={mergeUrl(baseUrl, clangs[0]!.url)}
+/>
+{
+    clangs.length > 0 &&
+        clangs.map((elem) => (
+            <link
+                rel="alternate"
+                hreflang={elem.code}
+                href={mergeUrl(baseUrl, elem.url)}
+            />
+        ))
+}

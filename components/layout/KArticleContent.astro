@@ -1,0 +1,26 @@
+---
+import KModuleList from './KModuleList.astro';
+import type { Article, Clang } from 'redaxo-adapter';
+import Alert from '../atoms/Alert.astro';
+
+interface Props {
+    article: Article;
+    clang: Clang;
+    ModuleListComponent?: any;
+    [key: string]: any;
+}
+
+const {
+    article,
+    clang,
+    ModuleListComponent = KModuleList,
+    ...rest
+} = Astro.props;
+---
+
+{
+    (!article.online || !clang.online) && (
+        <Alert>This article is not public yet</Alert>
+    )
+}
+<ModuleListComponent article={article} clang={clang} {...rest} />

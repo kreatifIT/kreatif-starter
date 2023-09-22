@@ -1,4 +1,4 @@
-import { getClangId } from '@helpers/cookies';
+import { getClangId } from '../utils/clang';
 import { useEffect, useState } from 'preact/hooks';
 import { RedaxoAdapter, getSelectedWildcards } from 'redaxo-adapter';
 

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import {
-    Article,
+    type Article,
     REX_ARTICLE_FRAGMENT,
     RedaxoAdapter,
     REX_ARTICLE_SLICE_FRAGMENT,

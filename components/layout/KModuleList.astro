@@ -1,0 +1,57 @@
+---
+import KModuleWrapper from './KModuleWrapper.astro';
+import { parseModuleValues } from 'redaxo-adapter';
+import type { Article, Clang } from 'redaxo-adapter';
+
+interface Props {
+    article: Article;
+    isFooterModuleList?: boolean;
+    clang: Clang;
+    ModuleWrapperComponent?: any;
+    moduleMapping: Map<string, any>;
+    [key: string]: any;
+}
+
+const {
+    isFooterModuleList,
+    moduleMapping,
+    article,
+    ModuleWrapperComponent = KModuleWrapper,
+    ...rest
+} = Astro.props;
+
+article.slices = article.slices.map((slice) => ({
+    ...slice,
+    values: parseModuleValues(slice.values),
+    media: parseModuleValues(slice.media),
+    link: parseModuleValues(slice.link),
+    linkList: parseModuleValues(slice.linkList),
+    mediaList: parseModuleValues(slice.mediaList),
+}));
+---
+
+{
+    article.slices.map((slice) => {
+        const Component = moduleMapping.get(slice.moduleCode);
+        if (!Component) {
+            console.error(
+                `No component found for moduleCode: "${slice.moduleCode}"`,
+            );
+            return null;
+        }
+
+        return (
+            <ModuleWrapperComponent
+                isFooterModule={isFooterModuleList}
+                {slice}
+                {...rest}
+            >
+                <Component
+                    {slice}
+                    isFooterModule={isFooterModuleList}
+                    {...rest}
+                />
+            </ModuleWrapperComponent>
+        );
+    })
+}

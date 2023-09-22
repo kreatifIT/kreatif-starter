@@ -1,0 +1,20 @@
+---
+import Image from './Image';
+import { getMedia } from 'redaxo-adapter';
+import { getClangId } from '@utils/clang';
+
+interface Props {
+    media: string;
+    mediaType: string;
+    contain?: boolean;
+    class?: string;
+}
+
+const { media, mediaType, contain, class: className = '' } = Astro.props;
+
+const clangId = getClangId(Astro);
+
+const mediaObj = await getMedia(media, mediaType, clangId);
+---
+
+<Image {...mediaObj} contain={contain} class={className} />

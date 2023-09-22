@@ -1,0 +1,28 @@
+---
+import { Article, ArticleSlice } from 'redaxo-adapter';
+import { getSliceEditLink } from '../../utils/edit-mode';
+interface Props {
+    isFooterModule?: boolean;
+    slice: ArticleSlice;
+    article: Article;
+}
+const { isFooterModule = false, slice, article } = Astro.props;
+const editLink = getSliceEditLink(
+    Astro,
+    isFooterModule || false,
+    slice,
+    article,
+);
+---
+
+{
+    editLink && (
+        <a
+            href={editLink}
+            target="_blank"
+            class="absolute bottom-10 right-10 rounded-md bg-primary px-4 py-1 text-sm font-bold text-white opacity-0 transition-opacity hover:opacity-50 group-hover:opacity-100"
+        >
+            Edit
+        </a>
+    )
+}

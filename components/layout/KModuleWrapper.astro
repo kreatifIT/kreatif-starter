@@ -1,0 +1,71 @@
+---
+import Aos from '../utils/aos/Aos';
+import type { Article, ArticleSlice } from 'redaxo-adapter';
+import EditButton from '../atoms/EditButton.astro';
+import { isRedaxoLoggedIn } from '../../utils/edit-mode';
+
+interface Props {
+    slice: ArticleSlice;
+    article?: Article;
+    isFooterModule?: boolean;
+    enableAos?: boolean;
+    class?: string;
+}
+
+const {
+    enableAos = true,
+    slice,
+    article,
+    isFooterModule,
+    class: className,
+} = Astro.props as Props;
+const isLoggedIn = isRedaxoLoggedIn(Astro);
+---
+
+{
+    (isLoggedIn || slice.online) && (
+        <section
+            class:list={[
+                'group/module relative',
+                !slice.online ? 'module-is-offline' : '',
+                className,
+            ]}
+            id={`section-${slice.id}`}
+        >
+            {enableAos ? (
+                <Aos client:visible>
+                    <slot />
+                    <EditButton {article} {isFooterModule} {slice} />
+                </Aos>
+            ) : (
+                <>
+                    <slot />
+                    <EditButton {article} {isFooterModule} {slice} />
+                </>
+            )}
+        </section>
+    )
+}
+
+<style lang="scss">
+    .module-is-offline {
+        & > * {
+            @apply opacity-50 transition-all duration-500;
+        }
+
+        &:hover {
+            & > * {
+                @apply opacity-10;
+            }
+
+            &:before {
+                @apply opacity-100;
+            }
+        }
+
+        &:before {
+            content: 'offline';
+            @apply absolute left-10 top-10 rounded-md bg-red-500 px-2 py-1 text-lg font-bold text-white opacity-10 transition-all duration-500;
+        }
+    }
+</style>
