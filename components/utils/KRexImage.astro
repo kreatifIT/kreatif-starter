@@ -1,5 +1,5 @@
 ---
-import Image from './Image';
+import KImage from './KImage';
 import { getMedia } from 'redaxo-adapter';
 import { getClangId } from '@utils/clang';
 
@@ -17,4 +17,4 @@ const clangId = getClangId(Astro);
 const mediaObj = await getMedia(media, mediaType, clangId);
 ---
 
-<Image {...mediaObj} contain={contain} class={className} />
+<KImage {...mediaObj} contain={contain} class={className} />

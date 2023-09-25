@@ -10,7 +10,7 @@ interface Props extends SplideProps {
     id: string;
 }
 
-export default function SplideSlider({ id, children, ...props }: Props) {
+export default function KSplideSlider({ id, children, ...props }: Props) {
     const ref = useRef<Splide>(null);
 
     const onMounted = () => {

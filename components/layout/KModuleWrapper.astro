@@ -1,7 +1,7 @@
 ---
-import Aos from '../utils/aos/Aos';
+import KAos from '../utils/KAos';
 import type { Article, ArticleSlice } from 'redaxo-adapter';
-import EditButton from '../atoms/EditButton.astro';
+import KEditButton from '../atoms/KEditButton.astro';
 import { isRedaxoLoggedIn } from '../../utils/edit-mode';
 
 interface Props {
@@ -10,10 +10,16 @@ interface Props {
     isFooterModule?: boolean;
     enableAos?: boolean;
     class?: string;
+    aosClass?: string;
+    aosActiveClass?: string;
+    aosInactiveClass?: string;
 }
 
 const {
     enableAos = true,
+    aosActiveClass,
+    aosInactiveClass,
+    aosClass,
     slice,
     article,
     isFooterModule,
@@ -33,14 +39,19 @@ const isLoggedIn = isRedaxoLoggedIn(Astro);
             id={`section-${slice.id}`}
         >
             {enableAos ? (
-                <Aos client:visible>
+                <KAos
+                    class={aosClass}
+                    activeClass={aosActiveClass}
+                    inactiveClass={aosInactiveClass}
+                    client:visible
+                >
                     <slot />
-                    <EditButton {article} {isFooterModule} {slice} />
-                </Aos>
+                    <KEditButton {article} {isFooterModule} {slice} />
+                </KAos>
             ) : (
                 <>
                     <slot />
-                    <EditButton {article} {isFooterModule} {slice} />
+                    <KEditButton {article} {isFooterModule} {slice} />
                 </>
             )}
         </section>

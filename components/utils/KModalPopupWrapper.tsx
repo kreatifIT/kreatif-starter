@@ -8,7 +8,7 @@ interface Props {
     innerClass?: string;
 }
 
-export default function PopupWrapper({
+export default function KModalPopupWrapper({
     children,
     visible,
     containerClass = 'fixed inset-0 after:bg-white after:opacity-95 after:absolute after:inset-0 after:-z-10',

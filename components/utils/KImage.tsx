@@ -5,7 +5,7 @@ interface Props extends Media {
     class?: string;
 }
 
-export default function Image({
+export default function KImage({
     alt,
     focusPoint,
     width,

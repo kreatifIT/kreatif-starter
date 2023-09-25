@@ -1,10 +1,10 @@
 ---
 import type {Article, Clang, Metadata} from 'redaxo-adapter';
-import HrefLangs from './head/HrefLangs.astro';
-import SEO from './head/SEO.astro';
-import Tracking from './head/Tracking.astro';
-import StructuredData from './head/StructuredData.astro';
-import Recaptcha from './head/Recaptcha.astro';
+import KHrefLangs from './head/KHrefLangs.astro';
+import KSEO from './head/KSEO.astro';
+import KTracking from './head/KTracking.astro';
+import KStructuredData from './head/KStructuredData.astro';
+import KRecaptcha from './head/KRecaptcha.astro';
 import {ViewTransitions} from 'astro:transitions';
 
 interface Props {
@@ -37,23 +37,23 @@ const {
 <head>
     <meta name="generator" content={Astro.generator}/>
     <slot name="href-langs">
-        <HrefLangs clangs={clangs} {baseUrl}/>
+        <KHrefLangs clangs={clangs} {baseUrl}/>
     </slot>
     <slot name="seo">
-        <SEO metadata={metadata} {path} {baseUrl}/>
+        <KSEO metadata={metadata} {path} {baseUrl}/>
     </slot>
     <slot name="tracking">
-        <Tracking/>
+        <KTracking/>
     </slot>
     <slot name="structured-data">
-        <StructuredData
+        <KStructuredData
             {baseUrl}
             metadata={metadata}
             siteStartArticle={siteStartArticle}
         />
     </slot>
     {viewTransitions &&
-            <slot name="view transitions">
+            <slot name="view-transitions">
                 <ViewTransitions/>
                 <script type="text/javascript" defer>
                     document.addEventListener('astro:beforeload', () => {
@@ -67,7 +67,7 @@ const {
                 </script>
             </slot>}
     {recaptcha &&
-            <Recaptcha/>}
+            <KRecaptcha/>}
     <slot name="head"/>
 </head>
 

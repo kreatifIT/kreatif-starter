@@ -1,11 +1,11 @@
-import useWildcards from '@adapters/redaxo/useWildcards';
-import type { FormError } from '../../../../../astro-redaxo-template/src/config/@types.ts';
-import { parseFormErrors, performRecaptcha } from '../../../config/form';
 import { useRef, useState } from 'preact/hooks';
 import './Form.scss';
 import Errors from './partials/Errors.tsx';
 import Success from './partials/Success.tsx';
-import { GraphQLResponse, RedaxoAdapter } from 'redaxo-adapter';
+import type { GraphQLResponse } from 'redaxo-adapter';
+import useWildcards from '../../../hooks/useWildcards.tsx';
+import type { FormError } from '../../../utils/forms.ts';
+import { parseFormErrors, performRecaptcha } from '../../../utils/forms.ts';
 
 interface FormDataBase {
     captcha: string;
@@ -38,27 +38,13 @@ export default function FormWrapper<T extends FormDataBase>({
         'label.error_recaptcha_not_successful',
         'label.error_privacy_not_accepted',
     ]);
-    const [errors, setErrors] = useState<FormError[]>([
-        // these are fake error messages for testing purposes
-        // {
-        //     field: 'recaptchaToken',
-        //     wildcard: 'label.error_recaptcha_not_successful',
-        // },
-        // {
-        //     field: 'recaptchaToken',
-        //     wildcard: 'label.error_recaptcha_not_successful',
-        // },
-    ]);
+    const [errors, setErrors] = useState<FormError[]>([]);
     const formRef = useRef<HTMLFormElement>(null);
     const scrollFormInit = () => {
         formRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
     const [success, setSuccess] = useState(false);
     const _onSubmit = (e: any) => {
-        RedaxoAdapter.init(
-            import.meta.env.PUBLIC_REDAXO_ENDPOINT,
-            import.meta.env.PUBLIC_REDAXO_ROOT,
-        );
         e.preventDefault();
         if (loading) return;
         setLoading(true);
@@ -69,6 +55,7 @@ export default function FormWrapper<T extends FormDataBase>({
         Object.keys(data).forEach((key) => {
             // @ts-ignore
             santizedData[key] =
+                // @ts-ignore
                 typeof data[key] === 'string' ? data[key].trim() : data[key];
         });
         // @ts-ignore
@@ -96,13 +83,11 @@ export default function FormWrapper<T extends FormDataBase>({
                             setErrors(parsedErrors);
                             setLoading(false);
                             scrollFormInit();
-                            console.log('errors');
                         } else if (data.success) {
                             setErrors([]);
                             setSuccess(true);
                             setLoading(false);
                             scrollFormInit();
-                            console.log('success');
                         } else {
                             for (var propName in data) {
                                 if (

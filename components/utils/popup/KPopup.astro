@@ -19,11 +19,15 @@ const values = slice.values as Values;
 
 <div>
     <div class:list={[visible ? '' : 'hidden']} data-popup-body>
-        <div data-popup-close></div>
+        <div data-popup-close>
+            <slot name="close" />
+        </div>
     </div>
     {
         showReopenButton && (
-            <div class:list={[visible ? 'hidden' : '']} data-popup-reopen />
+            <div class:list={[visible ? 'hidden' : '']} data-popup-reopen>
+                <slot name="reopen" />
+            </div>
         )
     }
 </div>

@@ -22,7 +22,7 @@ interface Props {
         };
     };
 }
-export default function Mapbox({ marker, accessToken }: Props) {
+export default function KMapbox({ marker, accessToken }: Props) {
     const iubendaPreferences = useIubendaPreferences();
     const [markerClicked, setMarkerClicked] = useState(false);
 

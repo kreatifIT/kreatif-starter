@@ -1,6 +1,5 @@
 import { getClangId } from '../utils/clang';
 import { useEffect, useState } from 'preact/hooks';
-import { RedaxoAdapter } from 'redaxo-adapter';
 
 export default function useRedaxoAdapter<T>(
     operation: (clangId: string) => Promise<T>,

@@ -2,9 +2,8 @@ import gql from 'graphql-tag';
 import {
     REX_ARTICLE_SLICE_FRAGMENT,
     RedaxoAdapter,
-    ArticleSlice,
+    type ArticleSlice,
 } from 'redaxo-adapter';
-import type { AstroGlobal } from 'astro';
 
 export interface PopupUserInformation {
     closed: boolean;

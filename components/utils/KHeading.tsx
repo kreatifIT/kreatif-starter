@@ -6,7 +6,7 @@ export interface HeadingProps {
     defaultTag?: string;
 }
 
-export default function Heading({
+export default function KHeading({
     text,
     class: className = '',
     defaultTag = 'h2',

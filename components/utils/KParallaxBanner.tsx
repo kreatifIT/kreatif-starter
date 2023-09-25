@@ -5,7 +5,7 @@ interface Props {
     children?: any;
 }
 
-export default function ParallaxBanner({ children }: Props) {
+export default function KParallaxBanner({ children }: Props) {
     const image = useRef<HTMLImageElement>(null);
     useEffect(() => {
         if (image.current) {

@@ -8,7 +8,7 @@ interface Props {
     children?: ComponentChild;
 }
 
-export default function RexLink({
+export default function KRexLink({
     link,
     title = link.label,
     children,

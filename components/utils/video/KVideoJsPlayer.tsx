@@ -14,7 +14,7 @@ interface Props {
     onReady?: (player: Player) => void;
 }
 
-export default function VideoJSPlayer({
+export default function KVideoJsPlayer({
     src,
     poster,
     type,

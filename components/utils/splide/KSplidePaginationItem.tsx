@@ -1,13 +1,9 @@
-import { useEffect, useState } from 'preact/hooks';
-import { useStore } from '@nanostores/preact';
-import { splideStore } from './splide-store.ts';
-
 interface Props {
     active: boolean;
     onClick: () => void;
 }
 
-export default function SplidePaginationItem({ active, onClick }: Props) {
+export default function KSplidePaginationItem({ active, onClick }: Props) {
     return (
         <button
             onClick={onClick}

@@ -1,4 +1,4 @@
-import type { FormError } from '../../../../../../astro-redaxo-template/src/config/@types.ts';
+import type { FormError } from '../../../../utils/forms.ts';
 
 interface Props {
     errors: FormError[];

@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/preact';
-import Image from '../image/Image.tsx';
+import KImage from '../KImage.tsx';
 import useIubendaPreferences from '../iubenda/useIubendaPreferences.tsx';
 import type { JSX } from 'preact';
 import { useEffect } from 'preact/hooks';
@@ -14,7 +14,7 @@ export interface Props {
     children: JSX.Element;
 }
 
-export default function SplideSlide({
+export default function KSplideSlide({
     id,
     youtubeUrl,
     video,
@@ -39,7 +39,7 @@ export default function SplideSlide({
         >
             {children}
             <div className="splide__slide__container">
-                {image && <Image {...image} />}
+                {image && <KImage {...image} />}
             </div>
         </li>
     );

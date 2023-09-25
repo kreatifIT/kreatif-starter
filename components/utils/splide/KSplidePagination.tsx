@@ -1,13 +1,13 @@
 import { useStore } from '@nanostores/preact';
 import { useEffect, useState } from 'preact/hooks';
 import { splideStore } from './splide-store.ts';
-import SplidePaginationItem from './SplidePaginationItem.tsx';
+import KSplidePaginationItem from './KSplidePaginationItem.tsx';
 
 interface Props {
     id: string;
     count: number;
 }
-export default function SplidePagination({ id, count }: Props) {
+export default function KSplidePagination({ id, count }: Props) {
     const [activeIdx, setActiveIdx] = useState(0);
     const splides = useStore(splideStore);
     useEffect(() => {
@@ -25,7 +25,7 @@ export default function SplidePagination({ id, count }: Props) {
     }, [id, splides]);
 
     return Array.from({ length: count }).map((_, idx) => (
-        <SplidePaginationItem
+        <KSplidePaginationItem
             active={activeIdx === idx}
             onClick={() => {
                 const splide = splides[id];

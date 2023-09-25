@@ -6,15 +6,18 @@ import type {
     NavigationItem,
     Wildcard,
 } from 'redaxo-adapter';
-import {RedaxoAdapter} from 'redaxo-adapter';
-import {query} from 'gql-query-builder';
-import {REDAXO_JWT_COOKIE_NAME} from '../utils/edit-mode.ts';
+import { RedaxoAdapter } from 'redaxo-adapter';
+import { query } from 'gql-query-builder';
+import { REDAXO_JWT_COOKIE_NAME } from '../utils/edit-mode.ts';
 import WildcardCache from '../utils/wildcards.ts';
-import {CLANG_ID_COOKIE_NAME} from '../utils/clang.ts';
-import type {AstroGlobal} from 'astro';
+import { CLANG_ID_COOKIE_NAME } from '../utils/clang.ts';
+import type { AstroGlobal } from 'astro';
 import gql from 'graphql-tag';
-import type {ProjectSettings} from './@types.ts';
-import {checkForRedirects} from '../utils/redirect.ts';
+import type { ProjectSettings } from './@types.ts';
+import { checkForRedirects } from '../utils/redirect.ts';
+import type { ModuleToMediaTypeMapping } from '../utils/modules.ts';
+import type { AdvancedRuntime } from '@astrojs/cloudflare';
+import L2Cache from './l2-cache.ts';
 
 const QRY_BUILDER_IMG_FRAGMENT: string[] = [
     'id',
@@ -28,7 +31,14 @@ const QRY_BUILDER_IMG_FRAGMENT: string[] = [
     'height',
 ];
 
-const QRY_BUILDER_NAVIGATION_FRAGMENT: string[] = ['id', 'label', 'url', 'internal', 'active', 'parentId'];
+const QRY_BUILDER_NAVIGATION_FRAGMENT: string[] = [
+    'id',
+    'label',
+    'url',
+    'internal',
+    'active',
+    'parentId',
+];
 
 const QRY_BUILDER_SLICES_FRAGMENT: string[] = [
     'id',
@@ -48,8 +58,13 @@ const QRY_BUILDER_ARTICLE_FRAGMENT: string[] = [
     'updatedAt',
     'online',
 ];
-export const REQUIRED_PROJECT_SETTINGS_FIELDS: IQueryBuilderOptions['fields'] =
-    [
+
+export function buildProjectSettingsFields({
+    additionalFields = [],
+}: {
+    additionalFields?: IQueryBuilderOptions['fields'];
+}): IQueryBuilderOptions['fields'] {
+    return [
         {
             organization: [
                 'name',
@@ -93,12 +108,14 @@ export const REQUIRED_PROJECT_SETTINGS_FIELDS: IQueryBuilderOptions['fields'] =
         },
         'seoGeoRegion',
         'websiteName',
+        ...additionalFields,
     ];
+}
 
 export function buildContentTypeFields({
-                                           additionalFields = [],
-                                           additionalArticleFields = [],
-                                       }: {
+    additionalFields = [],
+    additionalArticleFields = [],
+}: {
     additionalFields?: IQueryBuilderOptions['fields'];
     additionalArticleFields?: IQueryBuilderOptions['fields'];
 }): IQueryBuilderOptions['fields'] {
@@ -129,10 +146,21 @@ export function buildContentTypeFields({
             ],
             relatedArticle: [
                 ...QRY_BUILDER_ARTICLE_FRAGMENT,
-                ...additionalArticleFields,
                 {
-                    slices: QRY_BUILDER_SLICES_FRAGMENT,
+                    operation: {
+                        name: 'slicesWithMedia',
+                        alias: 'slices',
+                    },
+                    fields: QRY_BUILDER_SLICES_FRAGMENT,
+                    variables: {
+                        mediaMapping: {
+                            required: true,
+                            type: 'String',
+                            name: 'mapping',
+                        },
+                    },
                 },
+                ...additionalArticleFields,
             ],
         },
         ...additionalFields,
@@ -140,12 +168,12 @@ export function buildContentTypeFields({
 }
 
 export function buildInitialQuery({
-                                      additionalOptions = [],
-                                      projectSettingsFields = REQUIRED_PROJECT_SETTINGS_FIELDS,
-                                      contentTypeFields = buildContentTypeFields({}),
-                                      includeFooterMenu = true,
-                                  }: {
-    additionalOptions?: IQueryBuilderOptions[];
+    additionalOperations = [],
+    projectSettingsFields = buildProjectSettingsFields({}),
+    contentTypeFields = buildContentTypeFields({}),
+    includeFooterMenu = true,
+}: {
+    additionalOperations?: IQueryBuilderOptions[];
     projectSettingsFields?: IQueryBuilderOptions['fields'];
     contentTypeFields?: IQueryBuilderOptions['fields'];
     includeFooterMenu?: boolean;
@@ -180,7 +208,18 @@ export function buildInitialQuery({
             fields: [
                 'id',
                 {
-                    slices: QRY_BUILDER_SLICES_FRAGMENT,
+                    operation: {
+                        name: 'slicesWithMedia',
+                        alias: 'slices',
+                    },
+                    fields: QRY_BUILDER_SLICES_FRAGMENT,
+                    variables: {
+                        mediaMapping: {
+                            required: true,
+                            type: 'String',
+                            name: 'mapping',
+                        },
+                    },
                 },
             ],
         },
@@ -193,7 +232,7 @@ export function buildInitialQuery({
                 name: 'rootNavigation',
                 alias: 'navigation',
             },
-            fields:,
+            fields: QRY_BUILDER_NAVIGATION_FRAGMENT,
             variables: {
                 navigationDepth: {
                     required: true,
@@ -202,10 +241,25 @@ export function buildInitialQuery({
                 },
             },
         },
-        ...(includeFooterMenu ? [{
-            operation: 'footerMenu', fields: QRY_BUILDER_NAVIGATION_FRAGMENT,
-        }] : []),
-        ...additionalOptions,
+        ...(includeFooterMenu
+            ? [
+                  {
+                      operation: {
+                          name: 'navigation',
+                          alias: 'footerMenu',
+                      },
+                      fields: QRY_BUILDER_NAVIGATION_FRAGMENT,
+                      variables: {
+                          footerMenuName: {
+                              required: true,
+                              type: 'String',
+                              name: 'name',
+                          },
+                      },
+                  },
+              ]
+            : []),
+        ...additionalOperations,
     ];
 }
 
@@ -213,8 +267,10 @@ export async function performInitialRequest(
     variables: {
         path: string;
         navigationDepth: number;
+        mediaMapping?: string;
+        footerMenuName?: string;
     },
-    getQueryOptions?: () => IQueryBuilderOptions,
+    initialQuery?: IQueryBuilderOptions[],
 ): Promise<{
     projectSettings: ProjectSettings;
     wildCards: Wildcard[];
@@ -224,35 +280,36 @@ export async function performInitialRequest(
     siteStartArticle: Article;
     rootNavigation: NavigationItem[];
 }> {
-    const qryObject = getQueryOptions?.() || buildInitialQuery({});
-    const {query: _qry} = query(qryObject, undefined, {
+    const qryObject = initialQuery || buildInitialQuery({});
+    const { query: _qry } = query(qryObject, undefined, {
         operationName: 'INIT',
     });
     const qry = gql(_qry);
-    const {data} = await RedaxoAdapter.query(qry, variables, '1');
+    const { data } = await RedaxoAdapter.query(qry, variables, '1');
     return data;
 }
 
-//todo: rethink name
-export async function initRedaxoPage({
-                                         Astro,
-                                         variables,
-                                         redaxoEndpoint,
-                                         redaxoRoot,
-                                         redaxoSecret,
-                                         getQueryOptions,
-                                     }: {
+export async function kInitRedaxoPage({
+    Astro,
+    variables,
+    redaxo,
+    initialQuery,
+}: {
     Astro: AstroGlobal;
     variables: {
         path?: string;
         navigationDepth: number;
+        mediaMapping: ModuleToMediaTypeMapping;
     };
-    redaxoEndpoint: string;
-    redaxoRoot: string;
-    redaxoSecret?: string;
-    getQueryOptions?: () => IQueryBuilderOptions;
+    redaxo: {
+        endpoint: string;
+        root: string;
+        secret?: string;
+        enableL2Cache?: boolean;
+    };
+    initialQuery: IQueryBuilderOptions[];
 }) {
-    let {path = ''} = variables;
+    let { path = '' } = variables;
     path = '/' + path;
 
     if (
@@ -266,20 +323,30 @@ export async function initRedaxoPage({
 
     if (path === 'sitemap.xml' || path === 'robots.txt') {
         return {
-            redirect: Astro.redirect(`${redaxoRoot}/${path}`, 301),
+            redirect: Astro.redirect(`${redaxo.root}/${path}`, 301),
         };
     }
     const redaxoJwt =
         Astro.url.searchParams.get('auth') ??
         Astro.cookies.get(REDAXO_JWT_COOKIE_NAME)?.value;
-    RedaxoAdapter.init(redaxoEndpoint, redaxoRoot, redaxoJwt ?? redaxoSecret);
-    const {projectSettings, wildCards, contentType, redaxoLoggedIn, ...rest} =
+    RedaxoAdapter.init(
+        redaxo.endpoint,
+        redaxo.root,
+        redaxoJwt ?? redaxo.secret,
+        true,
+        redaxo.enableL2Cache && Astro.locals
+            ? new L2Cache(Astro.locals as AdvancedRuntime)
+            : undefined,
+    );
+    const { projectSettings, wildCards, contentType, redaxoLoggedIn, ...rest } =
         await performInitialRequest(
             {
+                footerMenuName: 'footer_menu',
                 ...variables,
+                mediaMapping: parseModuleToMediaMapping(variables.mediaMapping),
                 path,
             },
-            getQueryOptions,
+            initialQuery,
         );
 
     const currentClang = contentType.clangs.find((c) => c.active) as Clang;
@@ -306,8 +373,36 @@ export async function initRedaxoPage({
         ...rest,
         contentType,
         redirect,
+        path,
         clang: currentClang,
         clangs: contentType.clangs,
         article: contentType.relatedArticle,
     };
+}
+
+function parseModuleToMediaMapping(mapping: ModuleToMediaTypeMapping): string {
+    const result: Record<string, Record<string, string>> = {};
+    Object.entries(mapping).forEach(([key, value]) => {
+        value.forEach((item) => {
+            if (!result[key]) result[key] = {};
+            switch (item.source) {
+                case 'M':
+                case 'ML':
+                    const innerKey = item.source + '_' + item.id;
+                    result[key][innerKey] = item.mediaType;
+                    break;
+                case 'V':
+                    item.mediaTypes.forEach((innerType) => {
+                        const innerKey =
+                            innerType.source +
+                            '_' +
+                            item.id +
+                            '_' +
+                            innerType.id;
+                        result[key][innerKey] = innerType.mediaType;
+                    });
+            }
+        });
+    });
+    return JSON.stringify(result);
 }

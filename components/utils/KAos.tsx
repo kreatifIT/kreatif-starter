@@ -1,30 +1,29 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import './Aos.scss';
 
 interface Props {
-    inactiveClass?: string;
+    inActiveClass?: string;
     activeClass?: string;
+    class?: string;
     children: any;
     showEffect?: boolean;
 }
 
-export default function Aos({
-    inactiveClass = 'inactive',
-    activeClass = 'active',
-    showEffect = true,
+export default function KAos({
+    inActiveClass = 'opacity-0 translate-y-[5vh]',
+    activeClass = 'opacity-100 translate-y-0',
+    class: className = 'transition-all duration-1000 delay-200 ease',
     children,
 }: Props) {
     const ref = useRef<HTMLDivElement>(null);
     const [visible, setVisible] = useState(false);
     useEffect(() => {
-        if (ref.current && showEffect) {
+        if (ref.current) {
             const observer = new IntersectionObserver(
                 (entries) => {
                     setVisible(entries[0].isIntersecting);
                 },
                 {
-                    rootMargin: '300px 0px 300px 0px'
-
+                    rootMargin: '300px 0px 300px 0px',
                 },
             );
             observer.observe(ref.current);
@@ -34,7 +33,7 @@ export default function Aos({
     }, [ref]);
     return (
         <div
-            class={['aos', visible || !showEffect ? activeClass : inactiveClass].join(' ')}
+            class={[className, visible ? activeClass : inActiveClass].join(' ')}
             ref={ref}
         >
             {children}

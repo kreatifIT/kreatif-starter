@@ -9,7 +9,7 @@ interface Props {
     id: string;
 }
 
-export default function SplideArrow({ children, next, prev, id }: Props) {
+export default function KSplideArrow({ children, next, prev, id }: Props) {
     const sliders = useStore(splideStore);
     return (
         <button
