@@ -11,10 +11,6 @@ export default function useWildcards(_wildcards: string[]) {
         setLoading(true);
         setError(false);
         const clangId = getClangId();
-        RedaxoAdapter.init(
-            import.meta.env.PUBLIC_REDAXO_ENDPOINT,
-            import.meta.env.PUBLIC_REDAXO_ROOT,
-        );
         getSelectedWildcards(clangId, _wildcards)
             .then((wildcards) => {
                 setWildcards(
