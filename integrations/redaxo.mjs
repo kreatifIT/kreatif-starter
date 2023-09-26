@@ -1,7 +1,4 @@
-export default function createIntegration({
-    endpoint,
-    root
-                                          }) {
+export default function createIntegration() {
     return {
         name: 'redaxo-adapter-integration',
         hooks: {
