@@ -45,3 +45,7 @@ export const getDatepickerTodayDate = (): string => {
 
     return `${yyyy}-${mm}-${dd}`;
 };
+
+export const sanitizePhoneNumber = (phoneNumber: string): string => {
+    return phoneNumber.replace(/\s/g, '');
+};

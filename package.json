@@ -6,6 +6,10 @@
     "scripts": {
         "format": "prettier --write ."
     },
+    "bin": {
+        "kreatif-favicon": "bin/favicon-manifest-generator.cjs",
+        "kreatif-convert-font": "bin/convert-font.cjs $fontName"
+    },
     "repository": {
         "type": "git",
         "url": "git+ssh://git@github.com/kreatifIT/kreatif-starter.git"
@@ -24,12 +28,16 @@
         "astro": "^3.1.1",
         "astro-seo": "^0.8.0",
         "astro-seo-schema": "^3.2.0",
+        "favicons": "^7.1.4",
         "framer-motion": "^10.16.4",
         "gql-query-builder": "^3.8.0",
+        "jsdom": "^22.1.0",
         "nanostores": "^0.9.3",
         "preact": "^10.17.1",
         "react-map-gl": "^7.1.6",
         "redaxo-adapter": "^0.0.39",
+        "ttf2woff": "^3.0.0",
+        "ttf2woff2": "^5.0.0",
         "ukiyojs": "^4.1.2",
         "video.js": "^8.5.2"
     },
