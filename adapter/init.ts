@@ -333,7 +333,7 @@ export async function kInitRedaxoPage({
         redaxo.endpoint,
         redaxo.root,
         redaxoJwt ?? redaxo.secret,
-        true,
+        !redaxoJwt,
         redaxo.enableL2Cache && Astro.locals
             ? new L2Cache(Astro.locals as AdvancedRuntime)
             : undefined,
