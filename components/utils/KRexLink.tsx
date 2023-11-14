@@ -21,7 +21,6 @@ export default function KRexLink({
         <a
             class={className}
             href={link.url}
-            rel="noopener noreferrer"
             {...(link.target && { target: link.target })}
             {...(title && { title })}
         >

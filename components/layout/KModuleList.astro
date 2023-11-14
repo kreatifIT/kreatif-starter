@@ -40,14 +40,22 @@ article.slices = article.slices.map((slice) => ({
             return null;
         }
 
+        const isLast =
+            slice.id === article.slices[article.slices.length - 1].id;
+        const isFirst = slice.id === article.slices[0].id;
+
         return (
             <ModuleWrapperComponent
                 isFooterModule={isFooterModuleList}
                 {slice}
+                {article}
                 {...rest}
+                {isFirst}
+                {isLast}
             >
                 <Component
                     {slice}
+                    {article}
                     isFooterModule={isFooterModuleList}
                     {...rest}
                 />

@@ -5,3 +5,8 @@ export function getIconFromJson(name: string, json: any) {
     }
     return unescape('%u' + icon['encodedCode'].replace('\\', '')) || '□';
 }
+
+export const getIconString = (name: string): string => {
+    const icon: any = fontInfo[name];
+    return icon['encodedCode'] || '□';
+};

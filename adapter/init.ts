@@ -19,7 +19,7 @@ import type { ModuleToMediaTypeMapping } from '../utils/modules.ts';
 import type { AdvancedRuntime } from '@astrojs/cloudflare';
 import L2Cache from './l2-cache.ts';
 
-const QRY_BUILDER_IMG_FRAGMENT: string[] = [
+export const QRY_BUILDER_IMG_FRAGMENT: string[] = [
     'id',
     'filename',
     'focusPoint',
@@ -31,7 +31,7 @@ const QRY_BUILDER_IMG_FRAGMENT: string[] = [
     'height',
 ];
 
-const QRY_BUILDER_NAVIGATION_FRAGMENT: string[] = [
+export const QRY_BUILDER_NAVIGATION_FRAGMENT: string[] = [
     'id',
     'label',
     'url',
@@ -40,7 +40,7 @@ const QRY_BUILDER_NAVIGATION_FRAGMENT: string[] = [
     'parentId',
 ];
 
-const QRY_BUILDER_SLICES_FRAGMENT: string[] = [
+export const QRY_BUILDER_SLICES_FRAGMENT: string[] = [
     'id',
     'moduleCode',
     'values',
@@ -50,7 +50,7 @@ const QRY_BUILDER_SLICES_FRAGMENT: string[] = [
     'linkList',
     'online',
 ];
-const QRY_BUILDER_ARTICLE_FRAGMENT: string[] = [
+export const QRY_BUILDER_ARTICLE_FRAGMENT: string[] = [
     'id',
     'name',
     'url',
@@ -279,6 +279,7 @@ export async function performInitialRequest(
     footerArticle: Article;
     siteStartArticle: Article;
     rootNavigation: NavigationItem[];
+    shopContentType?: ContentType;
 }> {
     const qryObject = initialQuery || buildInitialQuery({});
     const { query: _qry } = query(qryObject, undefined, {
@@ -300,7 +301,8 @@ export async function kInitRedaxoPage({
         path?: string;
         navigationDepth: number;
         mediaMapping: ModuleToMediaTypeMapping;
-    };
+        shopRedirectPath?: string;
+    } & Record<string, any>;
     redaxo: {
         endpoint: string;
         root: string;
@@ -311,15 +313,6 @@ export async function kInitRedaxoPage({
 }) {
     let { path = '' } = variables;
     path = '/' + path;
-
-    if (
-        path.substring(path.lastIndexOf('/') + 1).includes('.') ||
-        path.startsWith('node_modules/')
-    ) {
-        return {
-            redirect: new Response(),
-        };
-    }
 
     if (path === 'sitemap.xml' || path === 'robots.txt') {
         return {
@@ -338,16 +331,40 @@ export async function kInitRedaxoPage({
             ? new L2Cache(Astro.locals as AdvancedRuntime)
             : undefined,
     );
-    const { projectSettings, wildCards, contentType, redaxoLoggedIn, ...rest } =
-        await performInitialRequest(
-            {
-                footerMenuName: 'footer_menu',
-                ...variables,
-                mediaMapping: parseModuleToMediaMapping(variables.mediaMapping),
-                path,
+
+    if (variables.shopRedirectPath) {
+        initialQuery.push({
+            operation: {
+                name: 'contentTypeByPath',
+                alias: 'shopContentType',
             },
-            initialQuery,
-        );
+            variables: {
+                shopRedirectPath: {
+                    required: true,
+                    type: 'String',
+                    name: 'path',
+                },
+            },
+            fields: ['type', 'elementId'],
+        });
+    }
+
+    const {
+        projectSettings,
+        wildCards,
+        contentType,
+        redaxoLoggedIn,
+        shopContentType,
+        ...rest
+    } = await performInitialRequest(
+        {
+            footerMenuName: 'footer_menu',
+            ...variables,
+            mediaMapping: parseModuleToMediaMapping(variables.mediaMapping),
+            path,
+        },
+        initialQuery,
+    );
 
     const currentClang = contentType.clangs.find((c) => c.active) as Clang;
     WildcardCache.prepareCache(wildCards, projectSettings, currentClang.id);
@@ -363,12 +380,20 @@ export async function kInitRedaxoPage({
     } else {
         Astro.cookies.delete(REDAXO_JWT_COOKIE_NAME);
     }
-    const redirect = await checkForRedirects(
+    let redirect = await checkForRedirects(
         contentType,
         currentClang,
         contentType.clangs,
         Astro,
     );
+    if (shopContentType) {
+        redirect = await checkForRedirects(
+            shopContentType,
+            currentClang,
+            contentType.clangs,
+            Astro,
+        );
+    }
     return {
         ...rest,
         contentType,
