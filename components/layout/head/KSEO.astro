@@ -108,5 +108,5 @@ const SEOData = {
     openGraph={SEOData.openGraph}
     twitter={SEOData.twitter}
     extend={SEOData.extend}
-    canonical={mergeUrl(baseUrl, path)}
+    canonical={Astro.url.href}
 />
