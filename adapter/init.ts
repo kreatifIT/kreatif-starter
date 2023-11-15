@@ -312,11 +312,14 @@ export async function kInitRedaxoPage({
     initialQuery: IQueryBuilderOptions[];
 }) {
     let { path = '' } = variables;
-    path = '/' + path;
+    if (!path.startsWith('/')) {
+        path = '/' + path;
+    }
 
-    if (path === 'sitemap.xml' || path === 'robots.txt') {
+    if (path === '/sitemap.xml' || path === '/robots.txt') {
+        const root = redaxo.root.replace(/\/$/, '');
         return {
-            redirect: Astro.redirect(`${redaxo.root}/${path}`, 301),
+            redirect: Astro.redirect(`${root}${path}`, 301),
         };
     }
     const redaxoJwt =
