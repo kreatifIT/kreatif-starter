@@ -171,11 +171,13 @@ export function buildInitialQuery({
     additionalOperations = [],
     projectSettingsFields = buildProjectSettingsFields({}),
     contentTypeFields = buildContentTypeFields({}),
+    rootNavigationFields = QRY_BUILDER_NAVIGATION_FRAGMENT,
     includeFooterMenu = true,
 }: {
     additionalOperations?: IQueryBuilderOptions[];
     projectSettingsFields?: IQueryBuilderOptions['fields'];
     contentTypeFields?: IQueryBuilderOptions['fields'];
+    rootNavigationFields?: IQueryBuilderOptions['fields'];
     includeFooterMenu?: boolean;
 }): IQueryBuilderOptions[] {
     return [
@@ -232,7 +234,7 @@ export function buildInitialQuery({
                 name: 'rootNavigation',
                 alias: 'navigation',
             },
-            fields: QRY_BUILDER_NAVIGATION_FRAGMENT,
+            fields: rootNavigationFields,
             variables: {
                 navigationDepth: {
                     required: true,
