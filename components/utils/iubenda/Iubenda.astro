@@ -1,8 +1,8 @@
 ---
-import { getBanner } from '../../../config/iubenda';
-import { getSettings } from '../../../../../@kreatif/starter/src/config/wildcards';
 import './Iubenda.scss';
-import type { Clang } from '@adapters/redaxo/@types';
+import { getSettings } from '../../../utils/wildcards';
+import { Clang } from 'redaxo-adapter';
+import { getBanner } from '../../../utils/iubenda';
 
 interface Props {
     clangs: Clang[];
@@ -21,13 +21,13 @@ const settings = getSettings(Astro);
     )}
 />
 <script type="text/javascript" is:inline>
-window.iubendaLanguageSwitch = () => {
-    const menuToggler = document.querySelector(
-        '.cookieBannerLanguageSwitch .cookieBannerLanguageToggler',
-    );
-    const menu = document.querySelector('.cookieBannerLanguageSwitch');
-    menuToggler.onclick = () => {
-        menu.classList.toggle('menu-open');
+    window.iubendaLanguageSwitch = () => {
+        const menuToggler = document.querySelector(
+            '.cookieBannerLanguageSwitch .cookieBannerLanguageToggler',
+        );
+        const menu = document.querySelector('.cookieBannerLanguageSwitch');
+        menuToggler.onclick = () => {
+            menu.classList.toggle('menu-open');
+        };
     };
-};
 </script>
