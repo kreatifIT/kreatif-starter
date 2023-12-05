@@ -1,7 +1,7 @@
 import type { AstroGlobal } from 'astro';
 import type { Clang } from 'redaxo-adapter';
-import { t } from '@kreatif/starter/utils/wildcards';
-import { getClangId } from './cookies';
+import { getClangId } from './clang.ts';
+import { t } from './wildcards.ts';
 
 const BANNER = `
 <div class="iubenda-cs-container">
