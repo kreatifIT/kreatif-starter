@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import type { FormError } from '../../../../utils/forms.ts';
 
 interface Props {

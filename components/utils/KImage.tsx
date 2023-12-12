@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import type { Media } from 'redaxo-adapter';
 
 interface Props extends Media {

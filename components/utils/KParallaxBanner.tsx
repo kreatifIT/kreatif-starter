@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import { useEffect, useRef } from 'preact/hooks';
 import type Ukiyo from 'ukiyojs';
 

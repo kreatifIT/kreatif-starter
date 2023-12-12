@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import './Icon.scss';
 type Props = {
     icon: string;

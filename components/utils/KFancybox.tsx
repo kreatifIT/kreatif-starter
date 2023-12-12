@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import { Fancybox as NativeFancybox } from '@fancyapps/ui';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 import type { OptionsType } from '@fancyapps/ui/types/Fancybox/options';

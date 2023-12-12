@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './Mapbox.scss';
 import { useState } from 'preact/hooks';

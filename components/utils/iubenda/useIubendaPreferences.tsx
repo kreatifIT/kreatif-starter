@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import { useState, useEffect } from 'preact/hooks';
 
 interface Preferences {

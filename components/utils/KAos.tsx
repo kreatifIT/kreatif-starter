@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import { useEffect, useRef, useState } from 'preact/hooks';
 
 interface Props {

@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import { useStore } from '@nanostores/preact';
 import type { JSX } from 'preact';
 import { splideStore } from './splide-store.ts';

@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import { getClangId } from '../utils/clang';
 import { useEffect, useState } from 'preact/hooks';
 

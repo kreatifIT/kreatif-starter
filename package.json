@@ -1,6 +1,6 @@
 {
     "name": "@kreatif/starter",
-    "version": "0.0.12",
+    "version": "0.0.16",
     "description": "Package including default Utils, Components and Helpers for Kreatif's Image Projects",
     "type": "module",
     "scripts": {
@@ -22,6 +22,7 @@
     "homepage": "https://github.com/kreatifIT/kreatif-starter#readme",
     "dependencies": {
         "@astrojs/cloudflare": "^8.0.0",
+        "@astrojs/preact": "^3.0.1",
         "@fancyapps/ui": "^5.0.28",
         "@nanostores/preact": "^0.5.0",
         "@splidejs/react-splide": "^0.7.12",
@@ -40,6 +41,10 @@
         "ttf2woff2": "^5.0.0",
         "ukiyojs": "^4.1.2",
         "video.js": "^8.6.1"
+    },
+    "overrides": {
+        "react": "npm:@preact/compat@latest",
+        "react-dom": "npm:@preact/compat@latest"
     },
     "devDependencies": {
         "@types/node": "^20.10.4",

@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import type { ComponentChild } from 'preact';
 import type { Link } from 'redaxo-adapter';
 

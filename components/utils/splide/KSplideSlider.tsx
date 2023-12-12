@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import { Splide } from '@splidejs/react-splide';
 import type { SplideProps } from '@splidejs/react-splide';
 import { useEffect, useRef } from 'preact/hooks';

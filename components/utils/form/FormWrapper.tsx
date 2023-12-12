@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import { useRef, useState } from 'preact/hooks';
 import './Form.scss';
 import Errors from './partials/Errors.tsx';

@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import 'video.js/dist/video-js.css';
 import useIubendaPreferences from '../iubenda/useIubendaPreferences.tsx';
 import videojs from 'video.js';

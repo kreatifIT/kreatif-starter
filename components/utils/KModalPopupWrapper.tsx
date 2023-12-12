@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import { createPortal, useEffect } from 'preact/compat';
 import { AnimatePresence, motion } from 'framer-motion';
 

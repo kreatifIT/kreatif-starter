@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 interface Props {
     active: boolean;
     onClick: () => void;

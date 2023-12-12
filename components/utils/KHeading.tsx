@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import { h, type VNode } from 'preact';
 
 export interface HeadingProps {
