@@ -3,7 +3,6 @@ import { Splide } from '@splidejs/react-splide';
 import type { SplideProps } from '@splidejs/react-splide';
 import { useEffect, useRef } from 'preact/hooks';
 import { addSplide, removeSplide } from './splide-store.ts';
-import '@splidejs/splide-extension-video/dist/css/splide-extension-video.min.css';
 import '@splidejs/splide/dist/css/splide-core.min.css';
 import './Splide.scss';
 
