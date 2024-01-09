@@ -23,6 +23,10 @@ const { popups, PopupComponent }: Props = props;
                         slice={{
                             ...popup.slice,
                             values: parseModuleValues(popup.slice.values),
+                            media: parseModuleValues(popup.slice.media),
+                            link: parseModuleValues(popup.slice.link),
+                            linkList: parseModuleValues(popup.slice.linkList),
+                            mediaList: parseModuleValues(popup.slice.mediaList),
                         }}
                     />
                 </div>
