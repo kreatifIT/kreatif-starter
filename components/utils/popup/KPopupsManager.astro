@@ -1,21 +1,23 @@
 ---
-import Popup from './KPopup.astro';
+import Popup from './KPopup.Template.astro';
 import { parseModuleValues } from 'redaxo-adapter';
-import { PopupData } from '../../../popup/adapter';
+import { type PopupData } from '../../../popup/adapter';
 
 interface Props {
     popups: PopupData[];
+    PopupComponent: any;
 }
 
-const { popups } = Astro.props;
+const props = Astro.props;
+const { popups, PopupComponent }: Props = props;
 ---
 
 {
-    popups.map(
+    popups?.map(
         (popup, idx) =>
             (popup.visible || popup.showReopenButton) && (
                 <div data-popup data-popup-idx={idx}>
-                    <Popup
+                    <PopupComponent
                         visible={popup.visible}
                         showReopenButton={popup.showReopenButton}
                         slice={{

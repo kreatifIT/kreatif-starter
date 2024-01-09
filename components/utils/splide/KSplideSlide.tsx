@@ -1,3 +1,4 @@
+import React from 'preact/compat';
 import { useStore } from '@nanostores/preact';
 import KImage from '../KImage.tsx';
 import useIubendaPreferences from '../iubenda/useIubendaPreferences.tsx';

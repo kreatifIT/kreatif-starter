@@ -1,6 +1,6 @@
 {
     "name": "@kreatif/starter",
-    "version": "0.0.17",
+    "version": "0.0.18",
     "description": "Package including default Utils, Components and Helpers for Kreatif's Image Projects",
     "type": "module",
     "scripts": {

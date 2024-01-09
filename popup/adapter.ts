@@ -6,10 +6,10 @@ import {
 } from 'redaxo-adapter';
 
 export interface PopupUserInformation {
-    closed: boolean;
-    shownOnce: boolean;
-    currentArticleId: string;
-    lastModified: number;
+    closed?: boolean;
+    shownOnce?: boolean;
+    currentArticleId?: string;
+    lastModified?: number;
 }
 
 export interface PopupData {
