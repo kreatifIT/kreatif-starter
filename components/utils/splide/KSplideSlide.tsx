@@ -1,4 +1,3 @@
-import React from 'preact/compat';
 import { useStore } from '@nanostores/preact';
 import KImage from '../KImage.tsx';
 import useIubendaPreferences from '../iubenda/useIubendaPreferences.tsx';
@@ -39,9 +38,13 @@ export default function KSplideSlide({
             data-splide-html-video={video}
         >
             {children}
-            <div className="splide__slide__container">
-                {image && <KImage {...image} />}
-            </div>
+            {
+                (youtubeId || video || image) && (
+                    <div className="splide__slide__container">
+                        {image && <KImage {...image} />}
+                    </div>
+                )
+            }
         </li>
     );
 }
