@@ -15,6 +15,7 @@ const { popups, PopupComponent }: Props = props;
 {
     popups?.map(
         (popup, idx) =>
+            popup.slice &&
             (popup.visible || popup.showReopenButton) && (
                 <div data-popup data-popup-idx={idx}>
                     <PopupComponent
