@@ -248,63 +248,59 @@ export function buildInitialQuery({
         },
         ...(includeFooterMenu
             ? [
-                {
-                    operation: {
-                        name: 'navigation',
-                        alias: 'footerMenu',
-                    },
-                    fields: QRY_BUILDER_NAVIGATION_FRAGMENT,
-                    variables: {
-                        footerMenuName: {
-                            required: true,
-                            type: 'String',
-                            name: 'name',
-                        },
-                    },
-                },
-            ]
+                  {
+                      operation: {
+                          name: 'navigation',
+                          alias: 'footerMenu',
+                      },
+                      fields: QRY_BUILDER_NAVIGATION_FRAGMENT,
+                      variables: {
+                          footerMenuName: {
+                              required: true,
+                              type: 'String',
+                              name: 'name',
+                          },
+                      },
+                  },
+              ]
             : []),
         ...(includePopups
             ? [
-                {
-                    operation: {
-                        name: 'popups',
-                        alias: 'popups',
-                    },
-                    fields: [
-                        'visible',
-                        'showReopenButton',
-                        {
-                            newData: [
-                                'closed',
-                                'shownOnce',
-                                'lastModified',
-                            ],
-                        },
-                        {
-                            operation: {
-                                name: 'slice',
-                                alias: 'slice',
-                            },
-                            fields: QRY_BUILDER_SLICES_FRAGMENT,
-                            variables: {
-                                mediaMapping: {
-                                    required: true,
-                                    type: 'String',
-                                    name: 'mapping',
-                                },
-                            },
-                        },
-                    ],
-                    variables: {
-                        popupData: {
-                            required: true,
-                            type: '[PopupUserInformationInput!]',
-                            name: 'data',
-                        },
-                    },
-                },
-            ]
+                  {
+                      operation: {
+                          name: 'popups',
+                          alias: 'popups',
+                      },
+                      fields: [
+                          'visible',
+                          'showReopenButton',
+                          {
+                              newData: ['closed', 'shownOnce', 'lastModified'],
+                          },
+                          {
+                              operation: {
+                                  name: 'slice',
+                                  alias: 'slice',
+                              },
+                              fields: QRY_BUILDER_SLICES_FRAGMENT,
+                              variables: {
+                                  mediaMapping: {
+                                      required: true,
+                                      type: 'String',
+                                      name: 'mapping',
+                                  },
+                              },
+                          },
+                      ],
+                      variables: {
+                          popupData: {
+                              required: true,
+                              type: '[PopupUserInformationInput!]',
+                              name: 'data',
+                          },
+                      },
+                  },
+              ]
             : []),
         ...additionalOperations,
     ];
@@ -401,8 +397,11 @@ export async function kInitRedaxoPage({
             fields: ['type', 'elementId'],
         });
     }
-    const popupCookieData: PopupUserInformation[] = Astro.cookies.has('popup_data')
-        ? Astro.cookies.get('popup_data')?.json() : [];
+    const popupCookieData: PopupUserInformation[] = Astro.cookies.has(
+        'popup_data',
+    )
+        ? Astro.cookies.get('popup_data')?.json()
+        : [];
 
     const {
         projectSettings,
@@ -423,15 +422,22 @@ export async function kInitRedaxoPage({
         initialQuery,
     );
 
-
+    if (contentType.relatedArticle?.id === '2') {
+        Astro.response.status = 404;
+    }
 
     const currentClang = contentType.clangs.find((c) => c.active) as Clang;
     if (popups) {
-        Astro.cookies.set('popup_data', JSON.stringify(popups.map((p) => p.newData), {
-            sameSite: 'lax',
-            path: '/',
-        }));
+        Astro.cookies.set(
+            'popup_data',
+            JSON.stringify(popups.map((p) => p.newData)),
+            {
+                sameSite: 'lax',
+                path: '/',
+            },
+        );
     }
+
     WildcardCache.prepareCache(wildCards, projectSettings, currentClang.id);
     Astro.cookies.set(CLANG_ID_COOKIE_NAME, currentClang.id, {
         sameSite: 'lax',
