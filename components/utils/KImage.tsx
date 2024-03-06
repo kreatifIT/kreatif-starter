@@ -4,6 +4,7 @@ import type { Media } from 'redaxo-adapter';
 interface Props extends Media {
     contain?: boolean;
     class?: string;
+    loading?: 'lazy' | 'eager';
 }
 
 export default function KImage({
@@ -13,6 +14,7 @@ export default function KImage({
     src,
     srcset,
     height,
+    loading = 'lazy',
     contain,
     class: className,
 }: Props) {
@@ -26,7 +28,7 @@ export default function KImage({
             alt={alt}
             srcset={srcset}
             width={width}
-            loading="lazy"
+            loading={loading}
             height={height}
             className={
                 (contain ? 'object-contain ' : 'object-cover ') + className
