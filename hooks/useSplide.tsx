@@ -5,6 +5,6 @@ import { useMemo } from 'preact/hooks';
 
 export default function useSplide(id: string) {
     const splides = useStore(splideStore);
-    const splide = useMemo(() => splides[id], [id])
+    const splide = useMemo(() => splides[id], [id, splides]);
     return splide;
 }
