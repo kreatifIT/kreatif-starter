@@ -101,7 +101,7 @@ const SEOData = {
 
 <AstroSEO
     title={SEOData.title}
-    description={SEOData.description}
+    description={SEOData.description.replace(/<[^>]*>?/gm, '')}
     noindex={SEOData.noindex}
     nofollow={SEOData.nofollow}
     charset={SEOData.charset}
