@@ -40,21 +40,6 @@ const logoUrl = buildLogoUrl(baseUrl);
             addressCountry: settings.organization?.isoCountryCode,
             postalCode: settings.organization?.zip,
         },
-    }}
-/>
-<Schema
-    item={{
-        '@context': 'https://schema.org',
-        '@type': 'LocalBusiness',
-        name: settings.organization?.name,
-        address: {
-            '@type': 'PostalAddress',
-            streetAddress: settings.organization?.streetAddress,
-            addressLocality: settings.organization?.city,
-            addressRegion: settings.organization?.region,
-            addressCountry: settings.organization?.isoCountryCode,
-            postalCode: settings.organization?.zip,
-        },
         geo: {
             '@type': 'GeoCoordinates',
             latitude: settings.contact?.coordinates[0],
