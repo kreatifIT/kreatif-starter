@@ -16,13 +16,15 @@ const organizationImage = settings.organization?.images[0];
 
 const siteStartUrl = mergeUrl(baseUrl, siteStartArticle.url);
 const logoUrl = buildLogoUrl(baseUrl);
+
+const organizationName = settings.organization?.name.replace(/<[^>]*>?/gm, '');
 ---
 
 <Schema
     item={{
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        name: settings.organization?.name,
+        name: organizationName,
         url: siteStartUrl,
         logo: logoUrl,
     }}
@@ -31,7 +33,7 @@ const logoUrl = buildLogoUrl(baseUrl);
     item={{
         '@context': 'https://schema.org',
         '@type': 'LocalBusiness',
-        name: settings.organization?.name,
+        name: organizationName,
         address: {
             '@type': 'PostalAddress',
             streetAddress: settings.organization?.streetAddress,
@@ -68,7 +70,7 @@ const logoUrl = buildLogoUrl(baseUrl);
     item={{
         '@context': 'https://schema.org',
         '@type': 'WebSite',
-        name: settings.websiteName || settings.organization?.name,
+        name: settings.websiteName || organizationName,
         url: siteStartUrl,
     }}
 />
