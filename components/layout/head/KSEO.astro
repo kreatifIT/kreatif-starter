@@ -22,6 +22,7 @@ const titlePrefix = title.slice(0, lastSlashPos > 0 ? lastSlashPos : 0).trim();
 
 const SEOData = {
     title,
+    canonical,
     titleTemplate: '%s / ' + titleSuffix,
     description: description,
     noindex: robots?.includes('noindex'),
