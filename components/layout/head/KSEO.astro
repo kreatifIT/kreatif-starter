@@ -20,10 +20,15 @@ const lastSlashPos = title.lastIndexOf(titleSplitter);
 const titleSuffix = title.slice(lastSlashPos > 0 ? lastSlashPos + 1 : 0).trim();
 const titlePrefix = title.slice(0, lastSlashPos > 0 ? lastSlashPos : 0).trim();
 
+const pathSuffix = '/';
+if (path == '/') {
+    const pathSuffix = '';
+}
+
 const SEOData = {
     title,
     canonical: canonical?.includes('https://cms.schlossplars.com')
-        ? import.meta.env.FRONTEND_ROOT + path + '/'
+        ? import.meta.env.FRONTEND_ROOT + path + pathSuffix
         : canonical,
     titleTemplate: '%s / ' + titleSuffix,
     description: description,
