@@ -109,5 +109,5 @@ const SEOData = {
     openGraph={SEOData.openGraph}
     twitter={SEOData.twitter}
     extend={SEOData.extend}
-    canonical={Astro.url.href}
+    canonical={SEOData.canonical ? SEOData.canonical : Astro.url.href}
 />
