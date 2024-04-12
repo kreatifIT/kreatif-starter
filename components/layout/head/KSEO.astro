@@ -22,9 +22,9 @@ const titlePrefix = title.slice(0, lastSlashPos > 0 ? lastSlashPos : 0).trim();
 
 const SEOData = {
     title,
-    canonical: canonical?.includes('http')
-        ? canonical
-        : import.meta.env.FRONTEND_ROOT + canonical?.substring(1),
+    canonical: canonical?.includes('https://cms.schlossplars.com')
+        ? import.meta.env.FRONTEND_ROOT + path
+        : canonical,
     titleTemplate: '%s / ' + titleSuffix,
     description: description,
     noindex: robots?.includes('noindex'),
