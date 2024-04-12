@@ -22,7 +22,9 @@ const titlePrefix = title.slice(0, lastSlashPos > 0 ? lastSlashPos : 0).trim();
 
 const SEOData = {
     title,
-    canonical,
+    canonical: canonical?.includes('http')
+        ? canonical
+        : baseUrl + canonical?.substring(1),
     titleTemplate: '%s / ' + titleSuffix,
     description: description,
     noindex: robots?.includes('noindex'),
