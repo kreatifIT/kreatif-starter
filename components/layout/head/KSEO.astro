@@ -20,11 +20,9 @@ const lastSlashPos = title.lastIndexOf(titleSplitter);
 const titleSuffix = title.slice(lastSlashPos > 0 ? lastSlashPos + 1 : 0).trim();
 const titlePrefix = title.slice(0, lastSlashPos > 0 ? lastSlashPos : 0).trim();
 
+var pathSuffix = '/';
 if (path == '/' || path == '') {
-    const pathSuffix = '';
-    const path = '';
-} else {
-    const pathSuffix = '/';
+    pathSuffix = '';
 }
 
 const SEOData = {
