@@ -27,7 +27,7 @@ if (path == '/' || path == '') {
 
 const SEOData = {
     title,
-    canonical: canonical?.includes('https://cms.schlossplars.com')
+    canonical: canonical?.includes(import.meta.env.PUBLIC_REDAXO_ROOT)
         ? import.meta.env.FRONTEND_ROOT + path + pathSuffix
         : canonical,
     titleTemplate: '%s / ' + titleSuffix,
