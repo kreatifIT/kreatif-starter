@@ -46,7 +46,7 @@ export default function FormWrapper<T extends FormDataBase>({
     };
     const [success, setSuccess] = useState(false);
     const _onSubmit = (e: any) => {
-        e.preventDefault();
+        // e.preventDefault();
         if (loading) return;
         setLoading(true);
         const form = e.target;
