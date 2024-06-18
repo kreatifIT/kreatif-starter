@@ -1,11 +1,10 @@
 ---
-import type {Article, Clang, Metadata} from 'redaxo-adapter';
+import type { Article, Clang, Metadata } from 'redaxo-adapter';
 import KHrefLangs from './head/KHrefLangs.astro';
 import KSEO from './head/KSEO.astro';
 import KTracking from './head/KTracking.astro';
 import KStructuredData from './head/KStructuredData.astro';
 import KRecaptcha from './head/KRecaptcha.astro';
-import {ViewTransitions} from 'astro:transitions';
 
 interface Props {
     metadata: Metadata;
@@ -16,7 +15,6 @@ interface Props {
     path: string;
     article?: Article;
     baseUrl: string;
-    viewTransitions?: boolean;
     recaptcha?: boolean;
     bodyClass?: string;
 }
@@ -24,7 +22,6 @@ const {
     recaptcha = false,
     baseUrl,
     bodyClass = '',
-    viewTransitions = true,
     clangs,
     siteStartArticle,
     metadata,
@@ -34,44 +31,29 @@ const {
 ---
 
 <html lang={clang.code.toLowerCase()}>
-<head>
-    <meta name="generator" content={Astro.generator}/>
-    <slot name="href-langs">
-        <KHrefLangs clangs={clangs} {baseUrl}/>
-    </slot>
-    <slot name="seo">
-        <KSEO metadata={metadata} {path} {baseUrl}/>
-    </slot>
-    <slot name="tracking">
-        <KTracking/>
-    </slot>
-    <slot name="structured-data">
-        <KStructuredData
-            {baseUrl}
-            metadata={metadata}
-            siteStartArticle={siteStartArticle}
-        />
-    </slot>
-    {viewTransitions &&
-            <slot name="view-transitions">
-                <ViewTransitions/>
-                <script type="text/javascript" defer>
-                    document.addEventListener('astro:beforeload', () => {
-                        if (
-                            typeof _iub.cs !== 'undefined' &&
-                            typeof _iub.cs.api !== 'undefined'
-                        ) {
-                            _iub.cs.api.activateSnippets();
-                        }
-                    });
-                </script>
-            </slot>}
-    {recaptcha &&
-            <KRecaptcha/>}
-    <slot name="head"/>
-</head>
+    <head>
+        <meta name="generator" content={Astro.generator} />
+        <slot name="href-langs">
+            <KHrefLangs clangs={clangs} {baseUrl} />
+        </slot>
+        <slot name="seo">
+            <KSEO metadata={metadata} {path} {baseUrl} />
+        </slot>
+        <slot name="tracking">
+            <KTracking />
+        </slot>
+        <slot name="structured-data">
+            <KStructuredData
+                {baseUrl}
+                metadata={metadata}
+                siteStartArticle={siteStartArticle}
+            />
+        </slot>
+        {recaptcha && <KRecaptcha />}
+        <slot name="head" />
+    </head>
 
-<body class={bodyClass}>
-<slot />
-</body>
+    <body class={bodyClass}>
+        <slot />
+    </body>
 </html>
