@@ -11,49 +11,50 @@ $pulseTiming: 2s;
     0% { opacity: 1;}
     50% { opacity: 0.2;}
     100% { opacity: 1;}
-  }
+}
   
-
-form {
-    @apply text-neutral-500 text-opacity-70 text-lg leading-snug;
-
-
-    &.loading {
-        animation: pulseanim $pulseTiming ease-in-out infinite;
-    }
-}
-
-select {
-    -webkit-appearance: none;
-}
-
-input[type="date"]::-webkit-inner-spin-button,
-input[type="date"]::-webkit-calendar-picker-indicator {
-    @apply absolute right-2 top-1/2 transform w-4 h-4 -translate-y-1/2  border p-1 opacity-0;
-}
-
-input[type="checkbox"] {
-    @apply z-0 relative w-9 h-9 block;
-
-    &:hover {
-        &:after {
-            @apply border-opacity-100;
+main {
+    form {
+        @apply text-neutral-500 text-opacity-70 text-lg leading-snug;
+    
+    
+        &.loading {
+            animation: pulseanim $pulseTiming ease-in-out infinite;
         }
     }
-
-    &:after,
-    &:before {
-        @apply z-10 absolute border-0 left-0 top-0 bottom-0 right-0 block bg-white;
-        content: "";
+    
+    select {
+        -webkit-appearance: none;
     }
-
-    &:after {
-        @apply transition-all border-2 border-zinc-300 border-opacity-50;
+    
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        @apply absolute right-2 top-1/2 transform w-4 h-4 -translate-y-1/2  border p-1 opacity-0;
     }
-
-    &:checked {
+    
+    input[type="checkbox"] {
+        @apply z-0 relative w-9 h-9 block;
+    
+        &:hover {
+            &:after {
+                @apply border-opacity-100;
+            }
+        }
+    
+        &:after,
+        &:before {
+            @apply z-10 absolute border-0 left-0 top-0 bottom-0 right-0 block bg-white;
+            content: "";
+        }
+    
         &:after {
-            @apply border-t-0 border-primary scale-50 border-4 border-l-0 -top-1/2 rotate-45;
+            @apply transition-all border-2 border-zinc-300 border-opacity-50;
+        }
+    
+        &:checked {
+            &:after {
+                @apply border-t-0 border-primary scale-50 border-4 border-l-0 -top-1/2 rotate-45;
+            }
         }
     }
 }
